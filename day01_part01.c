@@ -3,26 +3,28 @@
 
 #define STARTNUM 50
 #define MAXVAL 99
+#define MODULONUM (MAXVAL + 1)
 #define BUFSIZE 64
 
-char strBuf[BUFSIZE] = {};
-
 int turnRight(int currNum, int turnNum) {
-    return (currNum + turnNum) % (MAXVAL + 1);
+    return (currNum + turnNum) % MODULONUM;
 }
 
 int turnLeft(int currNum, int turnNum) {
-    currNum -= turnNum % 100;
-    return (currNum >= 0) ? currNum : (MAXVAL + 1 + currNum);
+    currNum -= turnNum % MODULONUM;
+    return (currNum >= 0) ? currNum : (MODULONUM + currNum);
 }
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
-        printf("Error: must provide path to input file as arg\n");
+        fprintf(stderr, "Error: must provide path to input file as arg\n");
         return -1;
     }
 
+    char strBuf[BUFSIZE] = {};
+
     FILE *f = fopen(argv[1], "r");
+    if (!f) return perror("Error opening file"), -1;
     int currNum = STARTNUM;
     int turnNum, zeroCount = 0;
     while (fgets(strBuf, BUFSIZE, f)) {
@@ -32,7 +34,7 @@ int main(int argc, char *argv[]) {
         } else if (strBuf[0] == 'R') {
             currNum = turnRight(currNum, turnNum);
         } else {
-            printf("Error: Leading char in line (%s) not recognized.\n", strBuf);
+            printf("Error: Leading char in line (%s) not recognized.", strBuf);
             fclose(f);
             return -1;
         }

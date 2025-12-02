@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define STARTNUM 50
-#define MODULONUM 100
-#define BUFSIZE 64
+#define STARTNUM    50
+#define MAXVAL      99
+#define MODULONUM   (MAXVAL + 1)
+#define BUFSIZE     64
 
 int zeroCount = 0;
-char strBuf[BUFSIZE] = {};
 
 int turnRight(int currNum, int turnNum) {
     int sum = currNum + turnNum;
@@ -28,11 +28,14 @@ int turnLeft(int currNum, int turnNum) {
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
-        printf("Error: must provide path to input file as arg\n");
+        fprintf(stderr, "Error: must provide path to input file as arg\n");
         return -1;
     }
 
+    char strBuf[BUFSIZE] = {};
+
     FILE *f = fopen(argv[1], "r");
+    if (!f) return perror("Error opening file"), -1;
     int currNum = STARTNUM;
     int turnNum = 0;
     while (fgets(strBuf, BUFSIZE, f)) {
