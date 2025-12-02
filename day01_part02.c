@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
     char strBuf[BUFSIZE] = {};
 
     FILE *f = fopen(argv[1], "r");
-    if (!f) return perror("Error opening file"), -1;
+    if (!f) return perror("fopen"), -1;
     int currNum = STARTNUM;
     int turnNum = 0;
     while (fgets(strBuf, BUFSIZE, f)) {
