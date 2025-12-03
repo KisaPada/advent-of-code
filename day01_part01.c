@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define STARTNUM 50
-#define MAXVAL 99
-#define MODULONUM (MAXVAL + 1)
-#define BUFSIZE 64
+#define STARTNUM    50
+#define MAXVAL      99
+#define MODULONUM   (MAXVAL + 1)
+#define BUFSIZE     64
 
 int turnRight(int currNum, int turnNum) {
     return (currNum + turnNum) % MODULONUM;
@@ -16,10 +16,7 @@ int turnLeft(int currNum, int turnNum) {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        fprintf(stderr, "Error: must provide path to input file as arg\n");
-        return -1;
-    }
+    if (argc != 2) return fprintf(stderr, "Error: must provide path to input file as arg\n"), -1;
 
     char strBuf[BUFSIZE] = {};
 
@@ -29,12 +26,10 @@ int main(int argc, char *argv[]) {
     int turnNum, zeroCount = 0;
     while (fgets(strBuf, BUFSIZE, f)) {
         turnNum = atoi(strBuf + 1);
-        if (strBuf[0] == 'L') {
-            currNum = turnLeft(currNum, turnNum);
-        } else if (strBuf[0] == 'R') {
-            currNum = turnRight(currNum, turnNum);
-        } else {
-            printf("Error: Leading char in line (%s) not recognized.", strBuf);
+        if (strBuf[0] == 'L') currNum = turnLeft(currNum, turnNum);
+        else if (strBuf[0] == 'R') currNum = turnRight(currNum, turnNum);
+        else {
+            fprintf(stderr, "Error: Leading char in line (%s) not recognized.", strBuf);
             fclose(f);
             return -1;
         }

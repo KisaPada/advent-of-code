@@ -12,9 +12,7 @@ int turnRight(int currNum, int turnNum) {
     int sum = currNum + turnNum;
     int rem = sum % MODULONUM;
 
-    if (sum >= MODULONUM) {
-        zeroCount += (sum - rem) / MODULONUM;
-    }
+    if (sum >= MODULONUM) zeroCount += (sum - rem) / MODULONUM;
 
     return rem;
 }
@@ -27,10 +25,7 @@ int turnLeft(int currNum, int turnNum) {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        fprintf(stderr, "Error: must provide path to input file as arg\n");
-        return -1;
-    }
+    if (argc != 2) return fprintf(stderr, "Error: must provide path to input file as arg\n"), -1;
 
     char strBuf[BUFSIZE] = {};
 
@@ -40,12 +35,10 @@ int main(int argc, char *argv[]) {
     int turnNum = 0;
     while (fgets(strBuf, BUFSIZE, f)) {
         turnNum = atoi(strBuf + 1);
-        if (strBuf[0] == 'L') {
-            currNum = turnLeft(currNum, turnNum);
-        } else if (strBuf[0] == 'R') {
-            currNum = turnRight(currNum, turnNum);
-        } else {
-            printf("Error: Leading char in line (%s) not recognized.\n", strBuf);
+        if (strBuf[0] == 'L') currNum = turnLeft(currNum, turnNum);
+        else if (strBuf[0] == 'R') currNum = turnRight(currNum, turnNum);
+        else {
+            fprintf(stderr, "Error: Leading char in line (%s) not recognized.\n", strBuf);
             fclose(f);
             return -1;
         }
