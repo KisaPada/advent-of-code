@@ -6,7 +6,18 @@ typedef struct rangeNode {
     struct rangeNode *next;
 } rangeNode;
 
-int addRange(rangeNode *head, unsigned long long l, unsigned long long r) {
+void freeLL(rangeNode *headPtr) {
+    rangeNode *currNode = headPtr;
+    rangeNode *nextNode;
+    while ((nextNode = currNode->next) != NULL) {
+        free(currNode);
+        currNode = nextNode;
+    }
+    free(currNode);
+    return;
+}
+
+void addRange(rangeNode *headPtr, unsigned long long l, unsigned long long r) {
     rangeNode *newNode = (rangeNode *)malloc(sizeof(rangeNode));
     if (!newNode) {
         perror("addRangeNode->malloc");
@@ -16,15 +27,33 @@ int addRange(rangeNode *head, unsigned long long l, unsigned long long r) {
     newNode->right = r;
     newNode->next  = NULL;
 
-    if (head->next == NULL) {
-        head->next = newNode;
-        return 0;
+    if (headPtr->next == NULL) {
+        headPtr->next = newNode;
+        return;
     }
 
-    rangeNode *ptr = head;
-    while ((ptr->next != NULL) && () ptr = ptr->next; // TODO: Continue from here
+    rangeNode *lptr = headPtr; // lptr points to rangeNode whose left bound is <= l
+    while ((lptr->next != NULL) && (lptr->next->left > l)) lptr = lptr->next;
+    if (lptr->next == NULL) {
+        lptr->next = newNode;
+        return;
+    } else lptr = lptr->next;
 
-    return 0;
+    rangeNode *rptr = lptr; // rptr points to rangeNode before rangeNode whose right bound >= r
+    while (rptr->next->left <= r) rptr = rptr->next;
+
+    if () {} // TODO: continue here -- simply insert if can
+    if (l < lptr->right) { // TODO: make left grow to match, remove others if needed
+        if (r > lptr->right) lptr->right = r;
+    }
+
+    // if (lptr == rptr) {
+    //     if (l < lptr->left) lptr->left = l;
+    //     if (r > lptr->right) lptr->right = r;
+    //     free(newNode);
+    // }
+
+    return;
 }
 
 int main(int argc, char **argv) {
