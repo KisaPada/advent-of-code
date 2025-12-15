@@ -17,43 +17,40 @@ void freeLL(rangeNode *headPtr) {
     return;
 }
 
-void addRange(rangeNode *headPtr, unsigned long long l, unsigned long long r) {
+int addRange(rangeNode *headPtr, unsigned long long l, unsigned long long r) {
     rangeNode *newNode = (rangeNode *)malloc(sizeof(rangeNode));
-    if (!newNode) {
-        perror("addRangeNode->malloc");
-        exit(-1);
-    }
+    if (!newNode) return perror("addRangeNode->malloc"), -1;
+
     newNode->left  = l;
     newNode->right = r;
     newNode->next  = NULL;
 
     if (headPtr->next == NULL) {
         headPtr->next = newNode;
-        return;
+        return 0;
     }
 
-    rangeNode *lptr = headPtr; // lptr points to rangeNode whose left bound is <= l
-    while ((lptr->next != NULL) && (lptr->next->left > l)) lptr = lptr->next;
-    if (lptr->next == NULL) {
+    rangeNode *lptr = headPtr;
+    while ((lptr->next != NULL) && (lptr->next->left <= l)) lptr = lptr->next;
+    if (l <= lptr->right) {
+        free(newNode);
+        if (r <= lptr->right) return 0;
+        lptr->right = r;
+        if (lptr->next == NULL) return 0;
+    } else {
+        if (lptr->next == NULL) {
+            lptr->next = newNode;
+            return 0;
+        }
+        newNode->next = lptr->next;
         lptr->next = newNode;
-        return;
-    } else lptr = lptr->next;
-
-    rangeNode *rptr = lptr; // rptr points to rangeNode before rangeNode whose right bound >= r
-    while (rptr->next->left <= r) rptr = rptr->next;
-
-    if () {} // TODO: continue here -- simply insert if can
-    if (l < lptr->right) { // TODO: make left grow to match, remove others if needed
-        if (r > lptr->right) lptr->right = r;
+        lptr = newNode;
     }
 
-    // if (lptr == rptr) {
-    //     if (l < lptr->left) lptr->left = l;
-    //     if (r > lptr->right) lptr->right = r;
-    //     free(newNode);
-    // }
+    rangeNode *rptr = lptr;
+    while ((rptr->next != NULL) && (
 
-    return;
+    return 0;
 }
 
 int main(int argc, char **argv) {
