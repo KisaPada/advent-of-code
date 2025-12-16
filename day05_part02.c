@@ -9,10 +9,8 @@ typedef struct rangeNode {
 unsigned long long countRange(rangeNode *headPtr) {
     unsigned long long count = 0;
     rangeNode *ptr = headPtr;
-
     while ((ptr = ptr->next) != NULL)
         count += ptr->right - ptr->left + 1;
-
     return count;
 }
 
@@ -97,7 +95,6 @@ int main(int argc, char **argv) {
         if (addRange(rangeLL, l, r) != 0) return fprintf(stderr, "(addrange): return != 0\n"), -1;
     }
     fclose(f);
-
 
     printf("Part 02: %llu\n", countRange(rangeLL));
 
