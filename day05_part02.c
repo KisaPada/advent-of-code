@@ -6,7 +6,26 @@ typedef struct rangeNode {
     struct rangeNode *next;
 } rangeNode;
 
+unsigned long long countRange(rangeNode *headPtr) {
+    unsigned long long count = 0;
+    rangeNode *ptr = headPtr;
+
+    while ((ptr = ptr->next) != NULL)
+        count += ptr->right - ptr->left + 1;
+
+    return count;
+}
+
+void printLL(rangeNode *headPtr) {
+    rangeNode *ptr = headPtr;
+    while ((ptr = ptr->next) != NULL)
+        printf("%15llu - %15llu --> \n", ptr->left, ptr->right);
+    printf("NULL\n");
+    return;
+}
+
 void freeLL(rangeNode *headPtr) {
+    if (headPtr == NULL) return;
     rangeNode *currNode = headPtr;
     rangeNode *nextNode;
     while ((nextNode = currNode->next) != NULL) {
@@ -48,7 +67,16 @@ int addRange(rangeNode *headPtr, unsigned long long l, unsigned long long r) {
     }
 
     rangeNode *rptr = lptr;
-    while ((rptr->next != NULL) && (
+    while ((rptr->next != NULL) && (rptr->next->left <= r)) rptr = rptr->next;
+    if (r <= rptr->right) {
+        lptr->right = rptr->right;
+    }
+
+    if (lptr == rptr) return 0;
+    rangeNode *tptr = lptr->next;
+    lptr->next = rptr->next;
+    rptr->next = NULL;
+    freeLL(tptr);
 
     return 0;
 }
@@ -56,7 +84,6 @@ int addRange(rangeNode *headPtr, unsigned long long l, unsigned long long r) {
 int main(int argc, char **argv) {
     if (argc != 2) return fprintf(stderr, "Error: must include path to input as arg\n"), -1;
 
-    unsigned int count = 0;
     char s[256] = {0};
 
     FILE *f = fopen(argv[1], "r");
@@ -71,7 +98,8 @@ int main(int argc, char **argv) {
     }
     fclose(f);
 
-    printf("Part 02: %d\n", count);
+
+    printf("Part 02: %llu\n", countRange(rangeLL));
 
     return 0;
 }
